@@ -1,0 +1,37 @@
+services:
+  glpatEye:
+    image: ilcreate/glpateye:latest
+    restart: always
+    ports:
+      - 8080:${SERVER_PORT}
+    environment:
+      - SERVER_PORT=8080
+      - GITLAB_TOKEN=${YOUR_TOKEN}
+      - GITLAB_URL=${YOUR_URL}
+      - GITLAB_PATTERN=${YOUR_PATTERN}
+      - CRON=*/5 * * * *
+      - OBJECTS_PER_PAGE=100            #max 100
+      - POOL_SIZE=300
+    volumes:
+      - $(pwd)/configs/config.yaml:/usr/local/bin/configs/config.yaml:ro
+  prometheus:
+    image: prom/prometheus
+    container_name: prometheus
+    command: '--config.file=/etc/prometheus/prometheus.yml'
+    ports:
+      - 9090:9090
+    restart: unless-stopped
+    volumes:
+      - ./prometheus:/etc/prometheus
+      - prom_data:/prometheus
+  grafana:
+    image: grafana/grafana
+    container_name: grafana
+    ports:
+      - 3000:3000
+    restart: unless-stopped
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=grafana
+    volumes:
+      - ./grafana:/etc/grafana/provisioning/datasources

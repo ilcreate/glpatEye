@@ -1,0 +1,9 @@
+server:
+  port: 8080
+
+gitlab:
+  base_url: "https://gitlab.com"
+  pattern: "^.*$"     # pattern for searching gitlab tokens by name
+  responseObjectsSize: 100        # quantity of returned objects from gitlab api per 1 req. MAX: 100 !
+  poolSize: 300                   # goroutine pool size
+  cron: "0 3 * * *"               # every 3 hours
