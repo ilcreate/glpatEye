@@ -1,7 +1,7 @@
 package common
 
 import (
-	"log"
+	"fmt"
 	"strings"
 	"time"
 )
@@ -14,15 +14,14 @@ func ExtractNumericID(fullID string) string {
 	return fullID
 }
 
-func CalculateDaysUntilExpire(expireDate string) int {
+func CalculateDaysUntilExpire(expireDate string) (int, error) {
 	parsedExpireDate, err := time.Parse("2006-01-02", expireDate)
 	if err != nil {
-		log.Printf("error to parse time: %s\n", err)
-		return 0
+		return 0, fmt.Errorf("error to parse time: %s\n", err)
 	}
 	days := int(time.Until(parsedExpireDate).Hours() / 24)
 	if days < 0 {
-		days = 0
+		return -1, fmt.Errorf("error calculate days before expire. quantity of days before expire is less than is.")
 	}
-	return days
+	return days, nil
 }

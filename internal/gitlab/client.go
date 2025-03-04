@@ -195,7 +195,10 @@ func (gc GitlabClient) CheckAccessTokens(ctx context.Context, ID string, project
 			} else {
 				return nil, fmt.Errorf("error matching. unknown resource type: %s", err)
 			}
-			token.DaysExpire = common.CalculateDaysUntilExpire(token.ExpiresAt)
+			token.DaysExpire, err = common.CalculateDaysUntilExpire(token.ExpiresAt)
+			if err != nil || token.DaysExpire < 0 {
+				continue
+			}
 			lastUsed := token.LastUsed
 			if lastUsed == "" {
 				lastUsed = "never"
@@ -222,6 +225,9 @@ func (gc GitlabClient) SelfCheckMasterToken(ctx context.Context, token string) (
 	if err != nil {
 		return AccessToken{}, fmt.Errorf("failed to send http req for self-check master token: %w", err)
 	}
-	response.DaysExpire = common.CalculateDaysUntilExpire(response.ExpiresAt)
+	response.DaysExpire, err = common.CalculateDaysUntilExpire(response.ExpiresAt)
+	if err != nil || response.DaysExpire < 0 {
+		return AccessToken{}, fmt.Errorf("master-token is expired or has invalid expiration date")
+	}
 	return response, nil
 }
