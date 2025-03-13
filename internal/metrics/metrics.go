@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"log"
 	"net/http"
-	"sync"
 
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/promauto"
@@ -34,7 +33,7 @@ var (
 		"root_token",
 	},
 	)
-	activeIDs sync.Map
+	// activeIDs sync.Map
 )
 
 type MetricLabels struct {
@@ -42,12 +41,17 @@ type MetricLabels struct {
 	DaysExpire                                       int
 }
 
-func ClearActiveIDs() {
-	activeIDs = sync.Map{}
+func ResetMetrics() {
+	log.Printf("Reset metrics!")
+	tokenDaysUntilExpire.Reset()
 }
 
+// func ClearActiveIDs() {
+// 	activeIDs = sync.Map{}
+// }
+
 func (m MetricLabels) UpdateMetric() {
-	activeIDs.Store(m.Id, true)
+	// activeIDs.Store(m.Id, true)
 	tokenDaysUntilExpire.WithLabelValues(
 		m.Name,
 		m.ProjectName,
@@ -72,6 +76,7 @@ func (m MetricLabels) UpdateMetric() {
 // 		log.Printf("Failed to gather metrics: %v", err)
 // 		return
 // 	}
+// 	log.Printf("METRIC LIST: %v", metricList)
 // 	for _, metric := range metricList {
 // 		if metric.GetName() == metricName {
 // 			for _, m := range metric.GetMetric() {

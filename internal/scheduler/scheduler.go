@@ -2,6 +2,7 @@ package scheduler
 
 import (
 	"context"
+	"glpatEye/internal/metrics"
 	"log"
 
 	gitlabClient "glpatEye/internal/gitlab"
@@ -18,10 +19,10 @@ func ScheduleTasks(scheduler gocron.Scheduler, ctx context.Context, client *gitl
 		gocron.NewTask(
 			func() {
 				log.Println("Scheduler started.")
+				metrics.ResetMetrics()
 				gitlabClient.CheckMasterToken(ctx, client)
 				gitlabClient.ProcessProjects(ctx, client, responseObjectsSize, poolSize)
 				gitlabClient.ProcessGroups(ctx, client, responseObjectsSize, poolSize)
-				// metrics.ResetStaleMetrics()
 				log.Println("Scheduler finished. Metrics were updated.")
 			},
 		),

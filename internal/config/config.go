@@ -26,7 +26,10 @@ type Config struct {
 func (c *Config) loadConfig(path string) error {
 	yamlFile, err := os.ReadFile(path)
 	if err != nil {
-		return fmt.Errorf("error during read a config file; %v%s\t", err, "USE ENVIRONMENT VARIABLES...")
+		err := fmt.Errorf("Error during read a config file: %w", err)
+		log.Default().Output(2, err.Error())
+		log.Printf("Use environment variables, because config file isn't set.")
+		return err
 	}
 
 	if err := yaml.Unmarshal(yamlFile, c); err != nil {
