@@ -21,7 +21,7 @@ This method requires some environment variables: \
 `GITLAB_PATTERN` - regex pattern for searching tokens by name. \
 `CRON` - period of checkout and updating metrics. \
 `OBJECTS_PER_PAGE` - quatity of returned objects per 1 request from Gitlab API. (Maximum: 100) \
-`POOL_SIZE` - size of goroutines pool for checking tokens. (maybe it's a useless variable, because Gitlab returns maximum 100 objects from API, and the pool isn't completely utilized).
+`POOL_SIZE` - size of goroutines pool for checking tokens. (maybe it's a useless variable, because Gitlab returns maximum 100 objects from API, and the pool isn't completely utilized). \
 `SERVER_PORT` - listening port for exported metrics.
 
 ## Support

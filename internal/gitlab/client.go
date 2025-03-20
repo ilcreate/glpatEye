@@ -18,7 +18,7 @@ import (
 
 func NewGitlabClient(token, baseUrl, pattern, cron string) (*GitlabClient, error) {
 	if token == "" {
-		log.Println("Gitlab token doesn't set. Check 'GITLAB_TOKEN' env variable")
+		log.Println("Gitlab token doesn't set. Check 'GITLAB_TOKEN' env variable, and set this variable.")
 		os.Exit(1)
 	}
 
@@ -28,7 +28,7 @@ func NewGitlabClient(token, baseUrl, pattern, cron string) (*GitlabClient, error
 	}
 
 	if pattern == "" {
-		log.Println("Regex pattern doesn't set. The sampling functionality won't work")
+		log.Println("Regex pattern doesn't set. The sampling functionality won't work.")
 		os.Exit(1)
 	}
 

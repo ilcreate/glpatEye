@@ -27,7 +27,6 @@ func (c *Config) loadConfig(path string) error {
 	yamlFile, err := os.ReadFile(path)
 	if err != nil {
 		err := fmt.Errorf("Error during read a config file: %w", err)
-		log.Default().Output(2, err.Error())
 		log.Printf("Use environment variables, because config file isn't set.")
 		return err
 	}
@@ -41,7 +40,7 @@ func (c *Config) loadConfig(path string) error {
 func (c *Config) InitAppConfig(path string) {
 	err := c.loadConfig(path)
 	if err != nil {
-		log.Printf("failed to load configuration; %v", err)
+		log.Printf("Failed to load configuration. %v", err)
 	}
 }
 

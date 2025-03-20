@@ -33,7 +33,6 @@ var (
 		"root_token",
 	},
 	)
-	// activeIDs sync.Map
 )
 
 type MetricLabels struct {
@@ -46,12 +45,7 @@ func ResetMetrics() {
 	tokenDaysUntilExpire.Reset()
 }
 
-// func ClearActiveIDs() {
-// 	activeIDs = sync.Map{}
-// }
-
 func (m MetricLabels) UpdateMetric() {
-	// activeIDs.Store(m.Id, true)
 	tokenDaysUntilExpire.WithLabelValues(
 		m.Name,
 		m.ProjectName,
@@ -62,37 +56,3 @@ func (m MetricLabels) UpdateMetric() {
 	).Set(float64(m.DaysExpire))
 	log.Printf("Updated metric for ID: %s", m.Id)
 }
-
-// func ResetStaleMetrics() {
-// 	log.Println("Starting to reset stale metrics!")
-// 	currentIDs := make(map[string]bool)
-// 	activeIDs.Range(func(key, value interface{}) bool {
-// 		currentIDs[key.(string)] = true
-// 		return true
-// 	})
-// 	log.Printf("Current active IDs: %v", currentIDs)
-// 	metricList, err := prometheus.DefaultGatherer.Gather()
-// 	if err != nil {
-// 		log.Printf("Failed to gather metrics: %v", err)
-// 		return
-// 	}
-// 	log.Printf("METRIC LIST: %v", metricList)
-// 	for _, metric := range metricList {
-// 		if metric.GetName() == metricName {
-// 			for _, m := range metric.GetMetric() {
-// 				var id string
-// 				labelValues := []string{}
-// 				for _, label := range m.GetLabel() {
-// 					if label.GetName() == "id" {
-// 						id = label.GetValue()
-// 					}
-// 					labelValues = append(labelValues, label.GetValue())
-// 				}
-// 				if _, exists := activeIDs.Load(id); !exists {
-// 					tokenDaysUntilExpire.DeleteLabelValues(labelValues...)
-// 					log.Printf("Deleted stale metric with ID: %s", id)
-// 				}
-// 			}
-// 		}
-// 	}
-// }
